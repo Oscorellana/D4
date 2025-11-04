@@ -1019,6 +1019,7 @@ GameObject:
   - component: {fileID: 230899920}
   - component: {fileID: 230899919}
   - component: {fileID: 230899918}
+  - component: {fileID: 230899921}
   m_Layer: 0
   m_Name: Bot
   m_TagString: Untagged
@@ -1120,6 +1121,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 230899916}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &230899921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230899916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c25bb80678f9814d86fe45e460a9510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetDummy
+  health: 1
 --- !u!43 &258091333
 Mesh:
   m_ObjectHideFlags: 0
@@ -1323,7 +1337,7 @@ Transform:
   m_GameObject: {fileID: 295356051}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.21, z: 0.499}
+  m_LocalPosition: {x: 0, y: 0, z: 0.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -47118,6 +47132,7 @@ GameObject:
   - component: {fileID: 1116190018}
   - component: {fileID: 1116190017}
   - component: {fileID: 1116190016}
+  - component: {fileID: 1116190019}
   m_Layer: 0
   m_Name: Bot (2)
   m_TagString: Untagged
@@ -47219,6 +47234,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1116190014}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1116190019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116190014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c25bb80678f9814d86fe45e460a9510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetDummy
+  health: 3
 --- !u!1 &1218783022
 GameObject:
   m_ObjectHideFlags: 0
@@ -47231,6 +47259,7 @@ GameObject:
   - component: {fileID: 1218783026}
   - component: {fileID: 1218783025}
   - component: {fileID: 1218783024}
+  - component: {fileID: 1218783027}
   m_Layer: 0
   m_Name: Bot (1)
   m_TagString: Untagged
@@ -47332,6 +47361,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1218783022}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1218783027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218783022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c25bb80678f9814d86fe45e460a9510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetDummy
+  health: 2
 --- !u!43 &1239470528
 Mesh:
   m_ObjectHideFlags: 0
@@ -48093,8 +48135,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   bulletPrefab: {fileID: 4898985720509796693, guid: 3fd2a878b1e647549aeb46e7837a2e55, type: 3}
   firePoint: {fileID: 295356052}
-  bulletSpeed: 20
-  fireRate: 0.25
+  bulletSpeed: 25
+  fireRate: 1
 --- !u!65 &1622249759
 BoxCollider:
   m_ObjectHideFlags: 0

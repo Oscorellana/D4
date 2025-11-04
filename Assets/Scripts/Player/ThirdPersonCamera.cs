@@ -1,10 +1,10 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // for mouse and scroll input
+using UnityEngine.InputSystem;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
     [Header("Target Settings")]
-    public Transform target;        // Player to follow
+    public Transform target;
     public Vector3 offset = new Vector3(0f, 2f, -4f);
 
     [Header("Camera Movement")]
@@ -22,7 +22,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public float zoomSpeed = 2f;
 
     [Header("Collision Settings")]
-    public LayerMask collisionLayers;   // what counts as an obstacle (Default, Ground, etc.)
+    public LayerMask collisionLayers;
     public float cameraRadius = 0.3f;
     public float minDistance = 0.5f;
     public float collisionSmooth = 0.05f;
@@ -35,20 +35,15 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void Start()
     {
-        if (target == null)
-            Debug.LogWarning("ThirdPersonCamera: No target assigned!");
-
-        // Initialize values
+        if (target == null) Debug.LogWarning("ThirdPersonCamera: No target assigned!");
         Vector3 euler = transform.eulerAngles;
-        yaw = euler.y;
-        pitch = euler.x;
-        currentZoom = offset.z; // store starting zoom distance
+        yaw = euler.y; pitch = euler.x;
+        currentZoom = offset.z;
     }
 
     void LateUpdate()
     {
         if (target == null) return;
-
         HandleRotation();
         HandleZoom();
         HandlePosition();
@@ -63,7 +58,6 @@ public class ThirdPersonCamera : MonoBehaviour
             pitch -= mouseDelta.y * rotationSpeed * mouseSensitivity * Time.deltaTime;
             pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
         }
-
         transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
     }
 
@@ -78,8 +72,6 @@ public class ThirdPersonCamera : MonoBehaviour
                 currentZoom = Mathf.Clamp(currentZoom, maxZoom, minZoom);
             }
         }
-
-        // Update offset.z with current zoom
         offset.z = Mathf.Lerp(offset.z, currentZoom, 10f * Time.deltaTime);
     }
 
@@ -88,7 +80,6 @@ public class ThirdPersonCamera : MonoBehaviour
         Vector3 targetPos = target.position;
         desiredCameraPos = targetPos + transform.rotation * offset;
 
-        // Check for collisions
         if (Physics.SphereCast(targetPos, cameraRadius, (desiredCameraPos - targetPos).normalized,
             out RaycastHit hit, Mathf.Abs(offset.z), collisionLayers, QueryTriggerInteraction.Ignore))
         {
@@ -99,7 +90,6 @@ public class ThirdPersonCamera : MonoBehaviour
         }
         else
         {
-            // Smooth follow
             transform.position = Vector3.SmoothDamp(transform.position, desiredCameraPos, ref currentVelocity, smoothTime);
         }
     }

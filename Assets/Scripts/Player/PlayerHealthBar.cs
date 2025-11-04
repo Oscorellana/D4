@@ -5,7 +5,7 @@ public class PlayerHealthBar : MonoBehaviour
 {
     [Header("References")]
     public Slider slider;
-    public Image fillImage; // The colored fill part of the bar
+    public Image fillImage; // drag the Fill image
 
     [Header("Smoothing")]
     public float smoothSpeed = 5f;
@@ -19,8 +19,7 @@ public class PlayerHealthBar : MonoBehaviour
 
     void Start()
     {
-        if (slider != null)
-            slider.value = 1f;
+        if (slider != null) slider.value = 1f;
     }
 
     public void UpdateHealthBar(float normalizedValue)
@@ -30,13 +29,9 @@ public class PlayerHealthBar : MonoBehaviour
 
     void Update()
     {
-        if (slider == null || fillImage == null)
-            return;
-
-        // Smooth slider movement
+        if (slider == null || fillImage == null) return;
         slider.value = Mathf.Lerp(slider.value, targetValue, Time.deltaTime * smoothSpeed);
 
-        // Smooth color transition (same as enemy)
         Color newColor;
         if (targetValue > 0.5f)
             newColor = Color.Lerp(midHealthColor, fullHealthColor, (targetValue - 0.5f) * 2f);

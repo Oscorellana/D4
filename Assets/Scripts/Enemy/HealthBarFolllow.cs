@@ -7,12 +7,9 @@ public class HealthBarFollow : MonoBehaviour
 
     void LateUpdate()
     {
-        if (target != null)
-        {
-            transform.position = target.position + offset;
-            Camera cam = Camera.main;
-            if (cam != null)
-                transform.LookAt(transform.position + cam.transform.forward);
-        }
+        if (target == null) return;
+        transform.position = target.position + offset;
+        Camera cam = Camera.main;
+        if (cam != null) transform.LookAt(transform.position + cam.transform.forward);
     }
 }

@@ -2,20 +2,18 @@ using UnityEngine;
 
 public class BillboardHealthBar : MonoBehaviour
 {
-    public Transform cameraTransform; // usually the main camera
+    public Transform cameraTransform;
+    public Vector3 offset = Vector3.up * 2f;
 
     void Start()
     {
-        if (cameraTransform == null && Camera.main != null)
-            cameraTransform = Camera.main.transform;
+        if (cameraTransform == null && Camera.main != null) cameraTransform = Camera.main.transform;
     }
 
     void LateUpdate()
     {
-        if (cameraTransform != null)
-        {
-            // Rotate to face the camera
-            transform.LookAt(transform.position + cameraTransform.forward);
-        }
+        if (cameraTransform == null) return;
+        transform.position = transform.parent != null ? transform.parent.position + offset : transform.position;
+        transform.LookAt(transform.position + cameraTransform.forward);
     }
 }

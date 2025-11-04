@@ -25,11 +25,9 @@ public class Weapon : MonoBehaviour
     void Shoot()
     {
         if (bulletPrefab == null || firePoint == null) return;
-
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         if (rb != null) rb.linearVelocity = firePoint.forward * bulletSpeed;
-
         Destroy(bullet, 5f);
     }
 }

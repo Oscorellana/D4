@@ -25,13 +25,10 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-
-
         controller = GetComponent<CharacterController>();
         if (cameraTransform == null && Camera.main != null)
             cameraTransform = Camera.main.transform;
 
-        // Hide and lock cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -60,7 +57,7 @@ public class PlayerController : MonoBehaviour
 
         float targetAngle = transform.eulerAngles.y;
 
-        // --- Rotation ---
+        // Rotation
         if (aiming)
         {
             targetAngle = cameraTransform.eulerAngles.y;
@@ -78,11 +75,10 @@ public class PlayerController : MonoBehaviour
             rotationVelocity = 0f;
         }
 
-        // --- Movement ---
+        // Movement
         if (direction.magnitude >= 0.1f)
         {
             Vector3 moveDir;
-
             if (aiming)
             {
                 Vector3 cameraForward = cameraTransform.forward;
@@ -108,9 +104,7 @@ public class PlayerController : MonoBehaviour
     void HandleGravity()
     {
         isGrounded = controller.isGrounded;
-        if (isGrounded && velocity.y < 0)
-            velocity.y = -2f;
-
+        if (isGrounded && velocity.y < 0) velocity.y = -2f;
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
@@ -118,12 +112,6 @@ public class PlayerController : MonoBehaviour
     void HandleJump()
     {
         if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
-        {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
     }
 }
-
-
-
-   

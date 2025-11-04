@@ -14,14 +14,9 @@ public class EnemyBullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(damage);
-            }
+            PlayerHealth ph = other.GetComponent<PlayerHealth>();
+            if (ph != null) ph.TakeDamage(damage);
         }
-
-        // Destroy the bullet when it hits anything
         Destroy(gameObject);
     }
 }

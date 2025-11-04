@@ -46459,7 +46459,8 @@ MonoBehaviour:
   - {fileID: 55437219}
   - {fileID: 1264614133}
   - {fileID: 1907284889}
-  numberToSpawn: 3
+  maxDummies: 5
+  respawnDelay: 2
 --- !u!1 &1014691354
 GameObject:
   m_ObjectHideFlags: 0
@@ -49969,6 +49970,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bot
       objectReference: {fileID: 0}
+    - target: {fileID: 7988925531163031482, guid: 82bb0f426cae1dd40bf3995af77b16f2, type: 3}
+      propertyPath: cameraTransform
+      value: 
+      objectReference: {fileID: 1014691357}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

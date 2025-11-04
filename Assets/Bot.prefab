@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 5411958436764842856}
   - component: {fileID: 7297984212260218046}
   - component: {fileID: 1601276707798849978}
+  - component: {fileID: 7988925531163031482}
   m_Layer: 5
   m_Name: HealthBarCanvas
   m_TagString: Untagged
@@ -252,6 +253,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &7988925531163031482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2530940064739586133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc91508dbcc164a4d9e8ff9f6c835f7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BillboardHealthBar
+  cameraTransform: {fileID: 0}
 --- !u!1 &5478896075331018365
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,7 +331,7 @@ Transform:
   m_GameObject: {fileID: 5978486146159775807}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -36.297382, y: 5.5, z: 39.651344}
+  m_LocalPosition: {x: -180.2, y: 5.5, z: 39.651344}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children:

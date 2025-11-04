@@ -3,19 +3,25 @@ using UnityEngine.UI;
 
 public class TargetDummy : MonoBehaviour
 {
-    [Header("Health Settings")]
-    public int maxHealth = 1;
+    public int maxHealth = 3;
     private int currentHealth;
 
     [Header("Health Bar")]
-    public GameObject healthBarPrefab;
+    public GameObject healthBarObject; // drag the Canvas child here
     private Slider healthSlider;
-    private GameObject healthBarInstance;
     private bool healthBarActive = false;
 
     void Start()
     {
         currentHealth = maxHealth;
+
+        if (healthBarObject != null)
+        {
+            healthBarObject.SetActive(false); // hide at start
+            healthSlider = healthBarObject.GetComponentInChildren<Slider>();
+            if (healthSlider != null)
+                healthSlider.value = 1f;
+        }
     }
 
     public void TakeDamage(int damage)
@@ -23,19 +29,14 @@ public class TargetDummy : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        // Create health bar if it doesn't exist yet
-        if (!healthBarActive && healthBarPrefab != null)
+        // Enable health bar on first hit
+        if (!healthBarActive && healthBarObject != null)
         {
-            healthBarInstance = Instantiate(healthBarPrefab, transform.position + Vector3.up * 2f, Quaternion.identity);
-            healthSlider = healthBarInstance.GetComponentInChildren<Slider>();
+            healthBarObject.SetActive(true);
             healthBarActive = true;
-
-            // Make it follow the dummy
-            HealthBarFollow followScript = healthBarInstance.AddComponent<HealthBarFollow>();
-            followScript.target = transform;
         }
 
-        // Update health slider
+        // Update slider
         if (healthSlider != null)
         {
             healthSlider.value = (float)currentHealth / maxHealth;
@@ -44,9 +45,6 @@ public class TargetDummy : MonoBehaviour
         // Destroy dummy if health reaches 0
         if (currentHealth <= 0)
         {
-            if (healthBarInstance != null)
-                Destroy(healthBarInstance);
-
             Destroy(gameObject);
         }
     }

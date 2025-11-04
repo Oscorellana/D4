@@ -10,7 +10,6 @@ public class HealthBarFollow : MonoBehaviour
         if (target != null)
         {
             transform.position = target.position + offset;
-            // Optional: face the camera
             Camera cam = Camera.main;
             if (cam != null)
                 transform.LookAt(transform.position + cam.transform.forward);

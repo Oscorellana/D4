@@ -42,7 +42,7 @@ public class EnemyAI : MonoBehaviour
         // Detect player within range
         if (distance <= detectionRange)
         {
-            Debug.Log($"{name} sees player at {distance:F1} meters");
+           // Debug.Log($"{name} sees player at {distance:F1} meters");
 
             FacePlayer();
 
@@ -86,7 +86,7 @@ public class EnemyAI : MonoBehaviour
 
             if (bulletPrefab != null && firePoint != null)
             {
-                Debug.Log($"{name} fired a bullet!");
+               // Debug.Log($"{name} fired a bullet!");
 
                 // Add slight random aim spread
                 Vector3 shootDir = (player.position + Vector3.up * 1.5f - firePoint.position).normalized;

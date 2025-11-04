@@ -46573,6 +46573,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 068b209c014168941a4c5e8b8cb52309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnManager
+  startingWave: 1
+  enemiesPerWave: 5
+  waveIncrement: 2
+  timeBetweenWaves: 3
   dummyPrefab: {fileID: 4631615282695837571, guid: 0513cf31ff74706409d6fe26ae7db619, type: 3}
   spawnPoints:
   - {fileID: 236783043}
@@ -46580,8 +46584,7 @@ MonoBehaviour:
   - {fileID: 55437219}
   - {fileID: 1264614133}
   - {fileID: 1907284889}
-  maxDummies: 5
-  respawnDelay: 2
+  waveText: {fileID: 0}
 --- !u!1 &1013353028
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,23 +2,37 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHealth = 5;
-    private int currentHealth;
+    [Header("Health Settings")]
+    public float maxHealth = 100f;
+    private float currentHealth;
+
+    [Header("Optional Settings")]
+    public GameObject deathEffect;
 
     void Start()
     {
         currentHealth = maxHealth;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float amount)
     {
-        currentHealth -= damage;
-        Debug.Log("Player took damage! Health: " + currentHealth);
+        currentHealth -= amount;
+        Debug.Log($"Player took {amount} damage. Current Health: {currentHealth}");
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0f)
         {
-            Debug.Log("Player died!");
-            // Add respawn or game over logic here
+            Die();
         }
+    }
+
+    void Die()
+    {
+        Debug.Log("Player Died!");
+
+        if (deathEffect != null)
+            Instantiate(deathEffect, transform.position, Quaternion.identity);
+
+        // For now, just disable the player
+        gameObject.SetActive(false);
     }
 }

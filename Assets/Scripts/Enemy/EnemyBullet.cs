@@ -2,17 +2,26 @@ using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
 {
-    public int damage = 1;
+    public float damage = 10f;
+    public float lifeTime = 3f;
+
+    void Start()
+    {
+        Destroy(gameObject, lifeTime);
+    }
 
     void OnTriggerEnter(Collider other)
     {
-        // Check if hit the player
-        PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-        if (playerHealth != null)
+        if (other.CompareTag("Player"))
         {
-            playerHealth.TakeDamage(damage);
+            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(damage);
+            }
         }
 
+        // Destroy the bullet when it hits anything
         Destroy(gameObject);
     }
 }

@@ -48,7 +48,7 @@ public class UpgradeUIManager : MonoBehaviour
         upgradeButton2.onClick.AddListener(() => SelectUpgrade(upgrade2));
     }
 
-    private void SelectUpgrade(string chosenUpgrade)
+    public void SelectUpgrade(string chosenUpgrade)
     {
         playerUpgrade.ApplyUpgrade(chosenUpgrade);
         upgradePanel.SetActive(false);

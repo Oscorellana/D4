@@ -5,7 +5,7 @@ public class PlayerHealthBar : MonoBehaviour
 {
     [Header("References")]
     public Slider slider;
-    public Image fillImage; // drag the Fill image
+    public Image fillImage; // the Fill Image inside the Slider
 
     [Header("Smoothing")]
     public float smoothSpeed = 5f;

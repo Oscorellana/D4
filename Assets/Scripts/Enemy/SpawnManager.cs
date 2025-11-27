@@ -9,39 +9,38 @@ public class SpawnManager : MonoBehaviour
     public int startingWave = 1;
     public int enemiesPerWave = 5;
     public int waveIncrement = 2;
-    public float timeBetweenWaves = 3f;
+    public float timeBetweenWaves = 2f;
+    public float spawnDelayBetweenEnemies = 0.25f;
 
     [Header("Spawning Settings")]
-    public GameObject dummyPrefab;
+    public GameObject enemyPrefab;
     public Transform[] spawnPoints;
 
     [Header("UI Settings")]
     public Text waveText;
-    public GameObject upgradePanel; // panel that contains upgrade buttons
-    public Button[] upgradeButtons; // assign 4 buttons (only two will be shown each wave)
+    public GameObject upgradePanel; // panel controlled by UpgradeUIManager
 
     [Header("References")]
-    public PlayerUpgrade playerUpgrade; // reference to PlayerUpgrade on player
+    public UpgradeUIManager upgradeUIManager;
+    public PlayerUpgrade playerUpgrade; // reference for upgrades (Inspector)
 
     private int currentWave;
-    private int aliveEnemies = 0;
+    private int aliveEnemies;
     private bool waveInProgress = false;
-    private readonly string[] allUpgrades = { "FireRate", "Damage", "Speed", "Health" };
 
     void Start()
     {
-        if (dummyPrefab == null || spawnPoints == null || spawnPoints.Length == 0)
+        if (enemyPrefab == null || spawnPoints == null || spawnPoints.Length == 0)
         {
-            Debug.LogError("SpawnManager: Missing setup (dummyPrefab or spawnPoints).");
+            Debug.LogError("SpawnManager: missing enemyPrefab or spawnPoints");
             return;
         }
 
-        currentWave = startingWave;
         if (upgradePanel != null) upgradePanel.SetActive(false);
+        currentWave = startingWave;
         StartCoroutine(StartNextWaveRoutine());
     }
 
-    // Public friendly wrapper so UI scripts can call it
     public void StartNextWave()
     {
         StartCoroutine(StartNextWaveRoutine());
@@ -57,93 +56,55 @@ public class SpawnManager : MonoBehaviour
         aliveEnemies = enemiesPerWave;
         Debug.Log($"SpawnManager: Starting Wave {currentWave} with {enemiesPerWave} enemies.");
 
-        for (int i = 0; i < enemiesPerWave; i++) SpawnDummy();
+        for (int i = 0; i < enemiesPerWave; i++)
+        {
+            SpawnEnemy();
+            yield return new WaitForSeconds(spawnDelayBetweenEnemies);
+        }
     }
 
-    public void SpawnDummy()
+    void SpawnEnemy()
     {
-        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        GameObject dummy = Instantiate(dummyPrefab, spawnPoint.position, spawnPoint.rotation);
-        TargetDummy td = dummy.GetComponent<TargetDummy>();
-        if (td != null) td.OnDeath += DummyDied;
-        Debug.Log($"Spawned dummy at {spawnPoint.position}");
+        Transform sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        GameObject e = Instantiate(enemyPrefab, sp.position, sp.rotation);
+        TargetDummy td = e.GetComponent<TargetDummy>();
+        if (td != null) td.OnDeath += OnEnemyDeath;
+        else Debug.LogWarning("Spawned enemy without TargetDummy");
+        Debug.Log("Spawned enemy at " + sp.position);
     }
 
-    private void DummyDied()
+    void OnEnemyDeath()
     {
         aliveEnemies--;
         if (aliveEnemies <= 0 && waveInProgress)
         {
             Debug.Log($"Wave {currentWave} cleared!");
             waveInProgress = false;
-            currentWave++;
-            enemiesPerWave += waveIncrement;
-            StartCoroutine(StartUpgradePhase());
-        }
-    }
 
-    private IEnumerator StartUpgradePhase()
-    {
-        if (upgradePanel != null) upgradePanel.SetActive(true);
-        SetupUpgradeButtons();
-
-        // Wait until upgrade panel is closed (FinishUpgrades will deactivate)
-        while (upgradePanel != null && upgradePanel.activeSelf) yield return null;
-
-        StartCoroutine(StartNextWaveRoutine());
-    }
-
-    private void SetupUpgradeButtons()
-    {
-        // hide all buttons first
-        for (int i = 0; i < upgradeButtons.Length; i++)
-        {
-            var b = upgradeButtons[i];
-            b.gameObject.SetActive(false);
-            b.onClick.RemoveAllListeners();
-        }
-
-        // pick two unique upgrades
-        List<string> pool = new List<string>(allUpgrades);
-        List<string> chosen = new List<string>();
-        while (chosen.Count < 2 && pool.Count > 0)
-        {
-            int idx = Random.Range(0, pool.Count);
-            chosen.Add(pool[idx]);
-            pool.RemoveAt(idx);
-        }
-
-        for (int i = 0; i < chosen.Count && i < upgradeButtons.Length; i++)
-        {
-            string up = chosen[i];
-            Button btn = upgradeButtons[i];
-            btn.gameObject.SetActive(true);
-            Text txt = btn.GetComponentInChildren<Text>();
-            if (txt != null) txt.text = GetPrettyName(up);
-
-            btn.onClick.AddListener(() =>
+            // start upgrade phase
+            if (upgradeUIManager != null)
             {
-                playerUpgrade.ApplyUpgrade(up);
-                FinishUpgrades();
-            });
+                // pause gameplay
+                Time.timeScale = 0f;
+                upgradeUIManager.ShowUpgradeChoices();
+            }
+            else
+            {
+                // no UI manager -> start next wave automatically
+                currentWave++;
+                enemiesPerWave += waveIncrement;
+                StartCoroutine(StartNextWaveRoutine());
+            }
         }
     }
 
-    static string GetPrettyName(string key)
+    // called by UI manager when upgrades finished
+    public void ResumeAfterUpgrade()
     {
-        switch (key)
-        {
-            case "FireRate": return "Faster Fire";
-            case "Damage": return "More Damage";
-            case "Speed": return "Move Faster";
-            case "Health": return "Increase Health";
-            default: return key;
-        }
-    }
-
-    public void FinishUpgrades()
-    {
-        if (upgradePanel != null) upgradePanel.SetActive(false);
-        Debug.Log("Player finished upgrades, next wave starting...");
+        // unpause and advance wave counters
+        Time.timeScale = 1f;
+        currentWave++;
+        enemiesPerWave += waveIncrement;
+        StartCoroutine(StartNextWaveRoutine());
     }
 }

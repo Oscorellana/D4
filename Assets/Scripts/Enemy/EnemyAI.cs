@@ -74,7 +74,7 @@ public class EnemyAI : MonoBehaviour
                 if (rb != null) rb.linearVelocity = shootDir * 20f;
                 Destroy(bullet, 3f);
             }
-            else Debug.LogWarning($"{name} cannot shoot � missing firePoint or bulletPrefab reference!");
+            else Debug.LogWarning($"{name} cannot shoot — missing firePoint or bulletPrefab reference!");
         }
     }
 }

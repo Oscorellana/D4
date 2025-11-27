@@ -47260,7 +47260,8 @@ MonoBehaviour:
   enemiesPerWave: 5
   waveIncrement: 2
   timeBetweenWaves: 3
-  dummyPrefab: {fileID: 4631615282695837571, guid: 0513cf31ff74706409d6fe26ae7db619, type: 3}
+  spawnDelayBetweenEnemies: 0.25
+  enemyPrefab: {fileID: 4631615282695837571, guid: 0513cf31ff74706409d6fe26ae7db619, type: 3}
   spawnPoints:
   - {fileID: 236783043}
   - {fileID: 157838701}
@@ -47269,11 +47270,7 @@ MonoBehaviour:
   - {fileID: 1907284889}
   waveText: {fileID: 0}
   upgradePanel: {fileID: 1473904200}
-  upgradeButtons:
-  - {fileID: 842157789}
-  - {fileID: 236405022}
-  - {fileID: 792551496}
-  - {fileID: 947660780}
+  upgradeUIManager: {fileID: 0}
   playerUpgrade: {fileID: 0}
 --- !u!1 &936813555
 GameObject:
@@ -47287,7 +47284,7 @@ GameObject:
   - component: {fileID: 936813558}
   - component: {fileID: 936813557}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49547,7 +49544,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4898985720509796693, guid: 3fd2a878b1e647549aeb46e7837a2e55, type: 3}
   firePoint: {fileID: 295356052}
   bulletSpeed: 50
-  fireRate: 1
+  baseFireRate: 0.25
 --- !u!65 &1622249759
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -50444,13 +50441,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae82c395b35af94b95a7a4590e2488e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeUIManager
-  upgradePanel: {fileID: 0}
-  upgradeButton1: {fileID: 0}
-  upgradeButton2: {fileID: 0}
-  upgradeText1: {fileID: 0}
-  upgradeText2: {fileID: 0}
-  spawnManager: {fileID: 0}
+  upgradePanel: {fileID: 1473904200}
+  choiceButtonA: {fileID: 842157789}
+  choiceButtonB: {fileID: 236405022}
+  choiceA_Title: {fileID: 1957285773}
+  choiceA_Desc: {fileID: 0}
+  choiceA_Icon: {fileID: 0}
+  choiceB_Title: {fileID: 936813557}
+  choiceB_Desc: {fileID: 0}
+  choiceB_Icon: {fileID: 0}
+  spawnManager: {fileID: 931640580}
   playerUpgrade: {fileID: 0}
+  iconCooldown: {fileID: 0}
+  iconDamage: {fileID: 0}
+  iconSpeed: {fileID: 0}
+  iconHealth: {fileID: 0}
 --- !u!4 &1809886863
 Transform:
   m_ObjectHideFlags: 0
@@ -50685,13 +50690,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce793713f612b70459241e269de0a5b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerUpgrade
+  shotCooldown: 0.25
+  damage: 1
+  moveSpeed: 5
+  maxHealth: 100
+  weapon: {fileID: 0}
   playerController: {fileID: 1854684339}
   playerHealth: {fileID: 1854684341}
-  playerWeapon: {fileID: 1622249758}
-  damagePerUpgrade: 1
-  fireRateMultiplier: 0.9
-  speedPerUpgrade: 1
-  healthPerUpgrade: 20
+  bulletPrefab: {fileID: 4898985720509796693, guid: 3fd2a878b1e647549aeb46e7837a2e55, type: 3}
 --- !u!1 &1866397948
 GameObject:
   m_ObjectHideFlags: 0
@@ -51090,7 +51096,7 @@ GameObject:
   - component: {fileID: 1957285774}
   - component: {fileID: 1957285773}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

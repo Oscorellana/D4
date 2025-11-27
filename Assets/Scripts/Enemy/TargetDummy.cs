@@ -8,7 +8,7 @@ public class TargetDummy : MonoBehaviour
     private int currentHealth;
 
     [Header("Health Bar Settings")]
-    public GameObject healthBarObject; // child canvas
+    public GameObject healthBarObject; // child canvas (world space)
     public Slider healthSlider;
     public Image fillImage;
     public float smoothSpeed = 5f;

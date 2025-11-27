@@ -6,8 +6,8 @@ public class PlayerHealth : MonoBehaviour
     public float maxHealth = 100f;
     [HideInInspector] public float currentHealth;
 
-    [Header("References (optional)")]
-    public PlayerHealthBar healthBar;
+    [Header("Optional")]
+    public PlayerHealthBar healthBar; // assign or auto-find
     public GameObject deathEffect;
 
     void Start()
@@ -31,16 +31,15 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("Player died.");
+        Debug.Log("Player Died!");
         if (deathEffect != null) Instantiate(deathEffect, transform.position, Quaternion.identity);
         gameObject.SetActive(false);
     }
 
-    // Useful to increase max health and heal immediately
     public void AddMaxHealth(float amount)
     {
         maxHealth += amount;
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0f, maxHealth);
         if (healthBar != null) healthBar.UpdateHealthBar(currentHealth / maxHealth);
     }
 }

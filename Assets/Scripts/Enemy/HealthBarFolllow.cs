@@ -3,7 +3,7 @@ using UnityEngine;
 public class HealthBarFollow : MonoBehaviour
 {
     public Transform target;
-    public Vector3 offset = new Vector3(0, 2f, 0);
+    public Vector3 offset = new Vector3(0, 4f, 0);
 
     void LateUpdate()
     {

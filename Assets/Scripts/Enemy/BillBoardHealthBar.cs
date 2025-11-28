@@ -3,7 +3,7 @@ using UnityEngine;
 public class BillboardHealthBar : MonoBehaviour
 {
     public Transform cameraTransform;
-    public Vector3 offset = Vector3.up * 2f;
+    public Vector3 offset = Vector3.up * 4f;
 
     void Start()
     {

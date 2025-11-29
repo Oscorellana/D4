@@ -2,14 +2,19 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public int damage = 1;
+    public float life = 3f;
+
+    private void Start()
+    {
+        Destroy(gameObject, life);
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
-        TargetDummy dummy = collision.collider.GetComponent<TargetDummy>();
-        if (dummy != null)
+        if (collision.collider.TryGetComponent<TargetDummy>(out var enemy))
         {
-            dummy.TakeDamage(damage);
+            PlayerUpgrade player = FindAnyObjectByType<PlayerUpgrade>();
+            enemy.TakeDamage(player.damage);
         }
 
         Destroy(gameObject);

@@ -1,113 +1,88 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class UpgradeUIManager : MonoBehaviour
 {
-    [Header("UI Elements")]
-    public GameObject upgradePanel;     // panel root (inactive by default)
-    public Button choiceButtonA;        // slot A
-    public Button choiceButtonB;        // slot B
-    public TMP_Text choiceA_Title;
-    public TMP_Text choiceA_Desc;
-    public Image choiceA_Icon;
-    public TMP_Text choiceB_Title;
-    public TMP_Text choiceB_Desc;
-    public Image choiceB_Icon;
+    public GameObject upgradeCanvas;
 
-    [Header("References")]
-    public SpawnManager spawnManager;
-    public PlayerUpgrade playerUpgrade;
+    [Header("Buttons")]
+    public Button leftButton;
+    public TMP_Text leftTitle;
+    public TMP_Text leftDesc;
 
-    // small icon map (optional) — assign sprites in Inspector
-    public Sprite iconCooldown;
-    public Sprite iconDamage;
-    public Sprite iconSpeed;
-    public Sprite iconHealth;
+    public Button rightButton;
+    public TMP_Text rightTitle;
+    public TMP_Text rightDesc;
 
-    private List<PlayerUpgrade.UpgradeType> pool = new List<PlayerUpgrade.UpgradeType> {
-        PlayerUpgrade.UpgradeType.ShotCooldown,
-        PlayerUpgrade.UpgradeType.Damage,
-        PlayerUpgrade.UpgradeType.Speed,
-        PlayerUpgrade.UpgradeType.Health
-    };
+    private PlayerUpgrade.UpgradeType leftChoice;
+    private PlayerUpgrade.UpgradeType rightChoice;
 
-    void Start()
+    private PlayerUpgrade playerUpgrade;
+    private SpawnManager spawnManager;
+    private PlayerInput playerInput;
+
+    private void Start()
     {
-        if (upgradePanel != null) upgradePanel.SetActive(false);
+        playerUpgrade = FindAnyObjectByType<PlayerUpgrade>();
+        spawnManager = FindAnyObjectByType<SpawnManager>();
+        playerInput = playerUpgrade.GetComponent<PlayerInput>();
+
+        upgradeCanvas.SetActive(false);
+
+        leftButton.onClick.AddListener(() => OnUpgradeSelected(leftChoice));
+        rightButton.onClick.AddListener(() => OnUpgradeSelected(rightChoice));
     }
 
     public void ShowUpgradeChoices()
     {
-        if (upgradePanel != null) upgradePanel.SetActive(true);
-        if (playerUpgrade == null) playerUpgrade = FindFirstObjectByType<PlayerUpgrade>();
+        upgradeCanvas.SetActive(true);
 
-        // choose two unique upgrades
-        List<PlayerUpgrade.UpgradeType> temp = new List<PlayerUpgrade.UpgradeType>(pool);
-        PlayerUpgrade.UpgradeType a = temp[Random.Range(0, temp.Count)];
-        temp.Remove(a);
-        PlayerUpgrade.UpgradeType b = temp[Random.Range(0, temp.Count)];
+        // Unlock + show cursor
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
-        SetupButton(choiceButtonA, a, choiceA_Title, choiceA_Desc, choiceA_Icon);
-        SetupButton(choiceButtonB, b, choiceB_Title, choiceB_Desc, choiceB_Icon);
+        // Disable player controls
+        playerInput.enabled = false;
+
+        var types = (PlayerUpgrade.UpgradeType[])System.Enum.GetValues(typeof(PlayerUpgrade.UpgradeType));
+
+        leftChoice = types[Random.Range(0, types.Length)];
+        rightChoice = types[Random.Range(0, types.Length)];
+
+        SetButton(leftChoice, leftTitle, leftDesc);
+        SetButton(rightChoice, rightTitle, rightDesc);
     }
 
-    void SetupButton(Button btn, PlayerUpgrade.UpgradeType type, TMP_Text title, TMP_Text desc, Image icon)
+    private void SetButton(PlayerUpgrade.UpgradeType type, TMP_Text title, TMP_Text desc)
     {
-        if (btn == null) return;
+        title.text = type.ToString();
 
-        // set text + description + icon
-        title.text = PrettyName(type);
-        desc.text = Description(type);
-        icon.sprite = IconFor(type);
-
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => { OnSelected(type); });
-    }
-
-    void OnSelected(PlayerUpgrade.UpgradeType chosen)
-    {
-        playerUpgrade.ApplyUpgrade(chosen);
-
-        // hide UI and resume waves
-        if (upgradePanel != null) upgradePanel.SetActive(false);
-        if (spawnManager != null) spawnManager.ResumeAfterUpgrade();
-    }
-
-    string PrettyName(PlayerUpgrade.UpgradeType t)
-    {
-        switch (t)
+        switch (type)
         {
-            case PlayerUpgrade.UpgradeType.ShotCooldown: return "Faster Fire";
-            case PlayerUpgrade.UpgradeType.Damage: return "More Damage";
-            case PlayerUpgrade.UpgradeType.Speed: return "Increased Speed";
-            case PlayerUpgrade.UpgradeType.Health: return "Max Health +20";
-            default: return t.ToString();
+            case PlayerUpgrade.UpgradeType.FireRate: desc.text = "Shoot faster"; break;
+            case PlayerUpgrade.UpgradeType.MoveSpeed: desc.text = "Move faster"; break;
+            case PlayerUpgrade.UpgradeType.Damage: desc.text = "Increase bullet damage"; break;
+            case PlayerUpgrade.UpgradeType.MaxHealth: desc.text = "Increase max health"; break;
         }
     }
 
-    string Description(PlayerUpgrade.UpgradeType t)
+    public void OnUpgradeSelected(PlayerUpgrade.UpgradeType choice)
     {
-        switch (t)
-        {
-            case PlayerUpgrade.UpgradeType.ShotCooldown: return "Decrease time between shots.";
-            case PlayerUpgrade.UpgradeType.Damage: return "Increase bullet damage.";
-            case PlayerUpgrade.UpgradeType.Speed: return "Move faster when walking.";
-            case PlayerUpgrade.UpgradeType.Health: return "Increase your maximum health.";
-            default: return "";
-        }
-    }
+        playerUpgrade.ApplyUpgrade(choice);
 
-    Sprite IconFor(PlayerUpgrade.UpgradeType t)
-    {
-        switch (t)
-        {
-            case PlayerUpgrade.UpgradeType.ShotCooldown: return iconCooldown;
-            case PlayerUpgrade.UpgradeType.Damage: return iconDamage;
-            case PlayerUpgrade.UpgradeType.Speed: return iconSpeed;
-            case PlayerUpgrade.UpgradeType.Health: return iconHealth;
-            default: return null;
-        }
+        // Hide + lock cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        // Enable movement + shooting again
+        playerInput.enabled = true;
+
+        // Hide UI
+        upgradeCanvas.SetActive(false);
+
+        // Start wave
+        spawnManager.StartNextWave();
     }
 }

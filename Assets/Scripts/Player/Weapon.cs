@@ -5,39 +5,37 @@ public class Weapon : MonoBehaviour
 {
     public GameObject bulletPrefab;
     public Transform firePoint;
+    public float bulletSpeed = 20f;
+    public float baseFireRate = 0.25f;
 
-    private PlayerUpgrade playerUpgrade;
+    float nextFireTime = 0f;
+    PlayerUpgrade playerUpgrade;
 
-    private float nextFireTime = 0f;
-
-    private void Start()
+    void Start()
     {
-        playerUpgrade = FindAnyObjectByType<PlayerUpgrade>();
+        playerUpgrade = FindFirstObjectByType<PlayerUpgrade>();
     }
 
-    private void Update()
+    void Update()
     {
-        if (Mouse.current != null && Mouse.current.leftButton.isPressed)
+        if (Mouse.current == null) return;
+
+        float effectiveRate = baseFireRate;
+        if (playerUpgrade != null) effectiveRate = playerUpgrade.fireRate;
+
+        if (Mouse.current.leftButton.isPressed && Time.time >= nextFireTime)
         {
-            if (Time.time >= nextFireTime)
-            {
-                Shoot();
-                nextFireTime = Time.time + playerUpgrade.fireRate;
-            }
+            Shoot();
+            nextFireTime = Time.time + effectiveRate;
         }
     }
 
-    private void Shoot()
+    void Shoot()
     {
-        if (bulletPrefab == null || firePoint == null)
-            return;
-
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        if (rb != null)
-            rb.linearVelocity = firePoint.forward * 20f;
-
-        Destroy(bullet, 5f);
+        if (bulletPrefab == null || firePoint == null) return;
+        GameObject b = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        Rigidbody rb = b.GetComponent<Rigidbody>();
+        if (rb != null) rb.linearVelocity = firePoint.forward * bulletSpeed;
+        Destroy(b, 6f);
     }
 }

@@ -2,41 +2,51 @@ using UnityEngine;
 
 public class PlayerUpgrade : MonoBehaviour
 {
-    public enum UpgradeType
+    public enum UpgradeType { ShotCooldown, Damage, Speed, Health }
+
+    [Header("Stats")]
+    public float fireRate = 0.25f; // seconds between shots (lower = faster)
+    public int damage = 1;
+    public float moveSpeed = 5f;
+    public int maxHealth = 100;
+
+    [Header("Optional references")]
+    public Weapon weapon;
+    public PlayerController playerController;
+    public PlayerHealth playerHealth;
+    public GameObject bulletPrefab;
+
+    void Start()
     {
-        FireRate,
-        MoveSpeed,
-        Damage,
-        MaxHealth
+        if (weapon == null) weapon = FindFirstObjectByType<Weapon>();
+        if (playerController == null) playerController = FindFirstObjectByType<PlayerController>();
+        if (playerHealth == null) playerHealth = FindFirstObjectByType<PlayerHealth>();
+        if (bulletPrefab == null && weapon != null) bulletPrefab = weapon.bulletPrefab;
     }
 
-    [Header("Player Stats")]
-    public float fireRate = 0.5f;
-    public float moveSpeed = 5f;
-    public int damage = 1;
-    public int maxHealth = 5;
-
-    public void ApplyUpgrade(UpgradeType upgrade)
+    public void ApplyUpgrade(UpgradeType u)
     {
-        switch (upgrade)
+        Debug.Log($"PlayerUpgrade: Applying {u}");
+        switch (u)
         {
-            case UpgradeType.FireRate:
-                fireRate *= 0.8f; // faster shooting
+            case UpgradeType.ShotCooldown:
+                fireRate = Mathf.Max(0.03f, fireRate * 0.85f);
+                if (weapon != null) weapon.baseFireRate = fireRate;
                 break;
-
-            case UpgradeType.MoveSpeed:
-                moveSpeed += 1.5f;
-                break;
-
             case UpgradeType.Damage:
                 damage += 1;
+                if (bulletPrefab != null)
+                {
+                    Bullet b = bulletPrefab.GetComponent<Bullet>();
+                    if (b != null) { /* prefab base damage not in Bullet class - damage read from PlayerUpgrade on hit */ }
+                }
                 break;
-
-            case UpgradeType.MaxHealth:
-                maxHealth += 2;
+            case UpgradeType.Speed:
+                if (playerController != null) playerController.walkSpeed += 1f;
+                break;
+            case UpgradeType.Health:
+                if (playerHealth != null) playerHealth.AddMaxHealth(20f);
                 break;
         }
-
-        Debug.Log($"Applied upgrade: {upgrade}");
     }
 }

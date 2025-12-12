@@ -2,21 +2,18 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float life = 3f;
+    public float lifeTime = 5f;
 
-    private void Start()
-    {
-        Destroy(gameObject, life);
-    }
+    void Start() => Destroy(gameObject, lifeTime);
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.TryGetComponent<TargetDummy>(out var enemy))
+        if (collision.collider.TryGetComponent<TargetDummy>(out var dummy))
         {
-            PlayerUpgrade player = FindAnyObjectByType<PlayerUpgrade>();
-            enemy.TakeDamage(player.damage);
+            PlayerUpgrade pu = FindFirstObjectByType<PlayerUpgrade>();
+            int dmg = pu != null ? pu.damage : 1;
+            dummy.TakeDamage(dmg);
         }
-
         Destroy(gameObject);
     }
 }

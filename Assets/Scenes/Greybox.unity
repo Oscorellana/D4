@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.6745098, g: 0.93333334, b: 0.53333336, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -2286,7 +2286,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.90943396, g: 0.14242072, b: 0.14242072, a: 1}
+    m_HighlightedColor: {r: 0.6747506, g: 0.93207544, b: 0.5328657, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -49337,6 +49337,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   bulletPrefab: {fileID: 4898985720509796693, guid: 3fd2a878b1e647549aeb46e7837a2e55, type: 3}
   firePoint: {fileID: 295356052}
+  bulletSpeed: 20
+  baseFireRate: 0.25
 --- !u!65 &1622249759
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -50230,13 +50232,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae82c395b35af94b95a7a4590e2488e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeUIManager
-  upgradeCanvas: {fileID: 1556486913}
-  leftButton: {fileID: 656372800}
-  leftTitle: {fileID: 760229013}
-  leftDesc: {fileID: 1536441844}
-  rightButton: {fileID: 29450401}
-  rightTitle: {fileID: 1832083501}
-  rightDesc: {fileID: 1565041187}
+  upgradePanel: {fileID: 1243073296}
+  choiceButtonA: {fileID: 656372800}
+  choiceA_Title: {fileID: 760229013}
+  choiceA_Desc: {fileID: 1536441844}
+  choiceA_Icon: {fileID: 1138087429}
+  choiceButtonB: {fileID: 29450401}
+  choiceB_Title: {fileID: 1832083501}
+  choiceB_Desc: {fileID: 1565041187}
+  choiceB_Icon: {fileID: 1624526934}
+  spawnManager: {fileID: 931640580}
+  playerUpgrade: {fileID: 1854684342}
+  playerController: {fileID: 1854684339}
+  playerWeapon: {fileID: 1622249758}
+  iconCooldown: {fileID: 0}
+  iconDamage: {fileID: 0}
+  iconSpeed: {fileID: 0}
+  iconHealth: {fileID: 0}
 --- !u!4 &1809886863
 Transform:
   m_ObjectHideFlags: 0
@@ -50664,9 +50676,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerUpgrade
   fireRate: 0.5
-  moveSpeed: 5
   damage: 1
+  moveSpeed: 5
   maxHealth: 5
+  weapon: {fileID: 0}
+  playerController: {fileID: 0}
+  playerHealth: {fileID: 0}
+  bulletPrefab: {fileID: 0}
 --- !u!1 &1866397948
 GameObject:
   m_ObjectHideFlags: 0

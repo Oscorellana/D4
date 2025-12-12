@@ -3,7 +3,7 @@ using UnityEngine;
 public class BillboardHealthBar : MonoBehaviour
 {
     public Transform cameraTransform;
-    public Vector3 offset = Vector3.up * 4f;
+    public Vector3 offset = Vector3.up * 2f;
 
     void Start()
     {
@@ -13,7 +13,7 @@ public class BillboardHealthBar : MonoBehaviour
     void LateUpdate()
     {
         if (cameraTransform == null) return;
-        transform.position = transform.parent != null ? transform.parent.position + offset : transform.position;
+        if (transform.parent != null) transform.position = transform.parent.position + offset;
         transform.LookAt(transform.position + cameraTransform.forward);
     }
 }

@@ -13,29 +13,27 @@ public class SpawnManager : MonoBehaviour
 
     [Header("Spawning Settings")]
     public GameObject enemyPrefab;
-    public Transform[] spawnPoints; // <-- assign these in Inspector
+    public Transform[] spawnPoints;
 
     [Header("References")]
-    public UpgradeUIManager upgradeUIManager; // assign your UI manager (optional)
+    public UpgradeUIManager upgradeUIManager;
 
-    private int currentWave;
-    private int aliveEnemies;
-    private bool waveInProgress = false;
+    int currentWave;
+    int aliveEnemies;
+    bool waveInProgress = false;
 
     void Start()
     {
-        // Safety checks
         if (enemyPrefab == null)
         {
-            Debug.LogError("SpawnManager: enemyPrefab is not assigned!");
+            Debug.LogError("SpawnManager: enemyPrefab not assigned!");
             enabled = false;
             return;
         }
 
-        // If no spawnPoints assigned, auto-create some around the Player
         if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            Debug.LogWarning("SpawnManager: No spawnPoints assigned, creating fallback spawn points.");
+            Debug.LogWarning("SpawnManager: spawnPoints not assigned. Creating fallback points.");
             CreateFallbackSpawnPoints(6, 6f);
         }
 
@@ -43,39 +41,15 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(StartNextWaveRoutine());
     }
 
-    // Create fallback empty transforms around the player if user forgot to assign them.
-    void CreateFallbackSpawnPoints(int count, float radius)
-    {
-        List<Transform> pts = new List<Transform>();
-        Transform player = GameObject.FindWithTag("Player")?.transform;
-        Vector3 center = player != null ? player.position : Vector3.zero;
-
-        for (int i = 0; i < count; i++)
-        {
-            GameObject go = new GameObject($"SpawnPoint_{i}");
-            go.transform.position = center + new Vector3(
-                Random.Range(-radius, radius),
-                0f,
-                Random.Range(-radius, radius)
-            );
-            go.transform.parent = this.transform;
-            pts.Add(go.transform);
-        }
-
-        spawnPoints = pts.ToArray();
-    }
-
     public void StartNextWave()
     {
         StartCoroutine(StartNextWaveRoutine());
     }
 
-    private IEnumerator StartNextWaveRoutine()
+    IEnumerator StartNextWaveRoutine()
     {
         waveInProgress = false;
-        if (waveInProgress == false)
-            Debug.Log($"SpawnManager: Preparing wave {currentWave}...");
-
+        if (waveInProgress == false) Debug.Log($"SpawnManager: Preparing wave {currentWave}...");
         yield return new WaitForSeconds(timeBetweenWaves);
 
         waveInProgress = true;
@@ -84,16 +58,16 @@ public class SpawnManager : MonoBehaviour
 
         for (int i = 0; i < enemiesPerWave; i++)
         {
-            SpawnEnemyAtRandomPoint();
+            SpawnEnemy();
             yield return new WaitForSeconds(spawnDelayBetweenEnemies);
         }
     }
 
-    void SpawnEnemyAtRandomPoint()
+    void SpawnEnemy()
     {
         if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            Debug.LogError("SpawnManager: No spawn points available to spawn enemies.");
+            Debug.LogError("SpawnManager: No spawnPoints available.");
             return;
         }
 
@@ -102,7 +76,6 @@ public class SpawnManager : MonoBehaviour
         TargetDummy td = e.GetComponent<TargetDummy>();
         if (td != null) td.OnDeath += OnEnemyDeath;
         else Debug.LogWarning("Spawned enemy missing TargetDummy component.");
-
         Debug.Log("Spawned enemy at " + sp.position);
     }
 
@@ -114,24 +87,31 @@ public class SpawnManager : MonoBehaviour
             Debug.Log($"Wave {currentWave} cleared!");
             waveInProgress = false;
 
-            // Show upgrade UI if present (does NOT pause time)
-            if (upgradeUIManager != null)
-            {
-                upgradeUIManager.ShowUpgradeChoices();
-            }
-            else
-            {
-                // If no UI manager, immediately advance wave
-                AdvanceWaveAndStart();
-            }
+            if (upgradeUIManager != null) upgradeUIManager.ShowUpgradeChoices();
+            else AdvanceWaveAndStart();
         }
     }
 
-    // Called by UpgradeUIManager when upgrade finished
     public void AdvanceWaveAndStart()
     {
         currentWave++;
         enemiesPerWave += waveIncrement;
         StartCoroutine(StartNextWaveRoutine());
+    }
+
+    void CreateFallbackSpawnPoints(int count, float radius)
+    {
+        var pts = new List<Transform>();
+        Transform player = GameObject.FindWithTag("Player")?.transform;
+        Vector3 center = player != null ? player.position : Vector3.zero;
+
+        for (int i = 0; i < count; i++)
+        {
+            GameObject go = new GameObject($"SpawnPoint_{i}");
+            go.transform.position = center + new Vector3(Random.Range(-radius, radius), 0f, Random.Range(-radius, radius));
+            go.transform.parent = transform;
+            pts.Add(go.transform);
+        }
+        spawnPoints = pts.ToArray();
     }
 }

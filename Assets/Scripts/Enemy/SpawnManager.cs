@@ -106,7 +106,7 @@ public class SpawnManager : MonoBehaviour
         Debug.Log("Spawned enemy at " + sp.position);
     }
 
-    void OnEnemyDeath()
+    public void OnEnemyDeath()
     {
         aliveEnemies--;
         if (aliveEnemies <= 0 && waveInProgress)

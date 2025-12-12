@@ -47096,7 +47096,7 @@ MonoBehaviour:
   enemiesPerWave: 1
   waveIncrement: 2
   timeBetweenWaves: 2
-  spawnDelayBetweenEnemies: 0.25
+  spawnDelayBetweenEnemies: 0.5
   enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   spawnPoints:
   - {fileID: 236783043}

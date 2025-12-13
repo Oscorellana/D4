@@ -23,6 +23,9 @@ public class SpawnManager : MonoBehaviour
 
     public void StartWave()
     {
+        if (GameStateManager.Instance.InUpgradePhase)
+            return;
+        
         StartCoroutine(SpawnWaveRoutine());
     }
 
@@ -81,6 +84,7 @@ public class SpawnManager : MonoBehaviour
         if (wavesThisMap >= 3)
         {
             wavesThisMap = 0;
+            GameStateManager.Instance.EnterUpgradePhase();
             if (upgradeUI != null)
                 upgradeUI.ShowUpgradeChoices();
             else

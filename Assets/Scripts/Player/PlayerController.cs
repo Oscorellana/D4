@@ -34,6 +34,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (GameStateManager.Instance != null &&
+            GameStateManager.Instance.InUpgradePhase)
+            return;
+        
         HandleInput();
         HandleGravity();
         HandleJump();

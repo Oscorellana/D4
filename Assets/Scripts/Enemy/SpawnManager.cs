@@ -1,117 +1,94 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
     [Header("Wave Settings")]
-    public int startingWave = 1;
     public int enemiesPerWave = 5;
     public int waveIncrement = 2;
-    public float timeBetweenWaves = 2f;
-    public float spawnDelayBetweenEnemies = 0.25f;
-
-    [Header("Spawning Settings")]
-    public GameObject enemyPrefab;
-    public Transform[] spawnPoints;
+    public float spawnDelay = 0.25f;
 
     [Header("References")]
-    public UpgradeUIManager upgradeUIManager;
+    public GameObject enemyPrefab;
+    public UpgradeUIManager upgradeUI;
 
-    int currentWave;
     int aliveEnemies;
-    bool waveInProgress = false;
+    int globalWave = 1;
+    int wavesThisMap = 0;
 
     void Start()
     {
+        StartWave();
+    }
+
+    public void StartWave()
+    {
+        StartCoroutine(SpawnWaveRoutine());
+    }
+
+    IEnumerator SpawnWaveRoutine()
+    {
+        yield return new WaitForSeconds(1f);
+
         if (enemyPrefab == null)
         {
-            Debug.LogError("SpawnManager: enemyPrefab not assigned!");
-            enabled = false;
-            return;
+            Debug.LogError("SpawnManager: Enemy prefab is NOT assigned!");
+            yield break;
         }
 
-        if (spawnPoints == null || spawnPoints.Length == 0)
+        if (MapManager.Instance == null || MapManager.Instance.currentMap == null)
         {
-            Debug.LogWarning("SpawnManager: spawnPoints not assigned. Creating fallback points.");
-            CreateFallbackSpawnPoints(6, 6f);
+            Debug.LogError("SpawnManager: No current map set!");
+            yield break;
         }
 
-        currentWave = startingWave;
-        StartCoroutine(StartNextWaveRoutine());
-    }
+        Transform[] points = MapManager.Instance.currentMap.enemySpawnPoints;
 
-    public void StartNextWave()
-    {
-        StartCoroutine(StartNextWaveRoutine());
-    }
+        if (points == null || points.Length == 0)
+        {
+            Debug.LogError("SpawnManager: Current map has no enemy spawn points!");
+            yield break;
+        }
 
-    IEnumerator StartNextWaveRoutine()
-    {
-        waveInProgress = false;
-        if (waveInProgress == false) Debug.Log($"SpawnManager: Preparing wave {currentWave}...");
-        yield return new WaitForSeconds(timeBetweenWaves);
-
-        waveInProgress = true;
+        wavesThisMap++;
         aliveEnemies = enemiesPerWave;
-        Debug.Log($"SpawnManager: Starting Wave {currentWave} with {enemiesPerWave} enemies.");
+
+        Debug.Log($"Starting Wave {globalWave} | Map Wave {wavesThisMap}");
 
         for (int i = 0; i < enemiesPerWave; i++)
         {
-            SpawnEnemy();
-            yield return new WaitForSeconds(spawnDelayBetweenEnemies);
+            Transform sp = points[Random.Range(0, points.Length)];
+            GameObject e = Instantiate(enemyPrefab, sp.position, sp.rotation);
+
+            TargetDummy td = e.GetComponent<TargetDummy>();
+            if (td != null)
+                td.OnDeath += OnEnemyDeath;
+            else
+                Debug.LogError("Enemy missing TargetDummy component!");
+
+            yield return new WaitForSeconds(spawnDelay);
         }
     }
 
-    void SpawnEnemy()
-    {
-        if (spawnPoints == null || spawnPoints.Length == 0)
-        {
-            Debug.LogError("SpawnManager: No spawnPoints available.");
-            return;
-        }
-
-        Transform sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        GameObject e = Instantiate(enemyPrefab, sp.position, sp.rotation);
-        TargetDummy td = e.GetComponent<TargetDummy>();
-        if (td != null) td.OnDeath += OnEnemyDeath;
-        else Debug.LogWarning("Spawned enemy missing TargetDummy component.");
-        Debug.Log("Spawned enemy at " + sp.position);
-    }
-
-    public void OnEnemyDeath()
+    void OnEnemyDeath()
     {
         aliveEnemies--;
-        if (aliveEnemies <= 0 && waveInProgress)
-        {
-            Debug.Log($"Wave {currentWave} cleared!");
-            waveInProgress = false;
+        if (aliveEnemies > 0) return;
 
-            if (upgradeUIManager != null) upgradeUIManager.ShowUpgradeChoices();
-            else AdvanceWaveAndStart();
-        }
-    }
-
-    public void AdvanceWaveAndStart()
-    {
-        currentWave++;
         enemiesPerWave += waveIncrement;
-        StartCoroutine(StartNextWaveRoutine());
-    }
+        globalWave++;
 
-    void CreateFallbackSpawnPoints(int count, float radius)
-    {
-        var pts = new List<Transform>();
-        Transform player = GameObject.FindWithTag("Player")?.transform;
-        Vector3 center = player != null ? player.position : Vector3.zero;
-
-        for (int i = 0; i < count; i++)
+        if (wavesThisMap >= 3)
         {
-            GameObject go = new GameObject($"SpawnPoint_{i}");
-            go.transform.position = center + new Vector3(Random.Range(-radius, radius), 0f, Random.Range(-radius, radius));
-            go.transform.parent = transform;
-            pts.Add(go.transform);
+            wavesThisMap = 0;
+            if (upgradeUI != null)
+                upgradeUI.ShowUpgradeChoices();
+            else
+                Debug.LogError("SpawnManager: UpgradeUI reference missing!");
         }
-        spawnPoints = pts.ToArray();
+        else
+        {
+            StartWave();
+        }
     }
 }

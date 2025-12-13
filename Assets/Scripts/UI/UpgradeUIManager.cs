@@ -1,167 +1,81 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class UpgradeUIManager : MonoBehaviour
 {
-    [Header("UI Elements")]
-    public GameObject upgradePanel; // root panel (inactive by default)
+    public GameObject panel;
 
-    public Button choiceButtonA;
-    public TMP_Text choiceA_Title;
-    public TMP_Text choiceA_Desc;
-    public Image choiceA_Icon;
+    public Button buttonA;
+    public TMP_Text aTitle;
+    public TMP_Text aMap;
 
-    public Button choiceButtonB;
-    public TMP_Text choiceB_Title;
-    public TMP_Text choiceB_Desc;
-    public Image choiceB_Icon;
+    public Button buttonB;
+    public TMP_Text bTitle;
+    public TMP_Text bMap;
 
-    [Header("References")]
-    public SpawnManager spawnManager;
-    public PlayerUpgrade playerUpgrade;
-    public PlayerController playerController;
-    public Weapon playerWeapon;
+    PlayerUpgrade upgrades;
+    SpawnManager spawner;
 
-    [Header("Optional Icons")]
-    public Sprite iconCooldown;
-    public Sprite iconDamage;
-    public Sprite iconSpeed;
-    public Sprite iconHealth;
-
-    List<PlayerUpgrade.UpgradeType> pool = new List<PlayerUpgrade.UpgradeType> {
-        PlayerUpgrade.UpgradeType.ShotCooldown,
-        PlayerUpgrade.UpgradeType.Damage,
-        PlayerUpgrade.UpgradeType.Speed,
-        PlayerUpgrade.UpgradeType.Health
-    };
+    PlayerUpgrade.UpgradeType upgradeA;
+    PlayerUpgrade.UpgradeType upgradeB;
+    MapData mapA;
+    MapData mapB;
 
     void Start()
     {
-        // auto-find missing references so inspector omissions won't crash
-        if (playerUpgrade == null) playerUpgrade = FindFirstObjectByType<PlayerUpgrade>();
-        if (playerController == null) playerController = FindFirstObjectByType<PlayerController>();
-        if (playerWeapon == null) playerWeapon = FindFirstObjectByType<Weapon>();
-        if (spawnManager == null) spawnManager = FindFirstObjectByType<SpawnManager>();
-
-        if (upgradePanel != null) upgradePanel.SetActive(false);
-
-        // safety: ensure buttons exist before adding listeners (we'll assign listeners at runtime)
-        if (choiceButtonA != null) choiceButtonA.onClick.RemoveAllListeners();
-        if (choiceButtonB != null) choiceButtonB.onClick.RemoveAllListeners();
+        upgrades = FindFirstObjectByType<PlayerUpgrade>();
+        spawner = FindFirstObjectByType<SpawnManager>();
+        panel.SetActive(false);
     }
 
-    // Called by SpawnManager when wave clears
     public void ShowUpgradeChoices()
     {
-        if (upgradePanel == null)
-        {
-            Debug.LogError("UpgradeUIManager: upgradePanel not assigned!");
-            return;
-        }
-        upgradePanel.SetActive(true);
-
-        // unlock cursor & show
+        panel.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // disable player control & weapon input (safe)
-        if (playerController != null) playerController.enabled = false;
-        if (playerWeapon != null) playerWeapon.enabled = false;
+        upgradeA = RandomUpgrade();
+        upgradeB = RandomUpgradeDifferent(upgradeA);
 
-        // pick two unique upgrades
-        var temp = new List<PlayerUpgrade.UpgradeType>(pool);
-        var a = temp[Random.Range(0, temp.Count)];
-        temp.Remove(a);
-        var b = temp[Random.Range(0, temp.Count)];
+        mapA = MapManager.Instance.GetRandomMap(MapManager.Instance.currentMap);
+        mapB = MapManager.Instance.GetRandomMap(mapA);
 
-        SetupButton(choiceButtonA, a, choiceA_Title, choiceA_Desc, choiceA_Icon);
-        SetupButton(choiceButtonB, b, choiceB_Title, choiceB_Desc, choiceB_Icon);
+        aTitle.text = upgradeA.ToString();
+        bTitle.text = upgradeB.ToString();
+
+        aMap.text = mapA.mapName;
+        bMap.text = mapB.mapName;
+
+        buttonA.onClick.RemoveAllListeners();
+        buttonB.onClick.RemoveAllListeners();
+
+        buttonA.onClick.AddListener(() => Select(upgradeA, mapA));
+        buttonB.onClick.AddListener(() => Select(upgradeB, mapB));
     }
 
-    void SetupButton(Button btn, PlayerUpgrade.UpgradeType type, TMP_Text title, TMP_Text desc, Image icon)
+    void Select(PlayerUpgrade.UpgradeType upgrade, MapData map)
     {
-        if (btn == null)
-        {
-            Debug.LogError("UpgradeUIManager.SetupButton: btn is null");
-            return;
-        }
-
-        if (title == null || desc == null)
-        {
-            Debug.LogError("UpgradeUIManager.SetupButton: Text fields are null for " + btn.name);
-            return;
-        }
-
-        // set text + description + icon (icon optional)
-        title.text = PrettyName(type);
-        desc.text = Description(type);
-        if (icon != null) icon.sprite = IconFor(type);
-
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => OnSelected(type));
-    }
-
-    void OnSelected(PlayerUpgrade.UpgradeType chosen)
-    {
-        if (playerUpgrade == null)
-            playerUpgrade = FindFirstObjectByType<PlayerUpgrade>();
-
-        if (playerUpgrade != null)
-            playerUpgrade.ApplyUpgrade(chosen);
-        else
-            Debug.LogWarning("UpgradeUIManager: PlayerUpgrade not found to apply upgrade.");
-
-        // hide UI
-        if (upgradePanel != null) upgradePanel.SetActive(false);
-
-        // re-enable player control and weapon
-        if (playerController != null) playerController.enabled = true;
-        if (playerWeapon != null) playerWeapon.enabled = true;
-
-        // lock cursor again
+        panel.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // tell spawn manager to begin next wave
-        if (spawnManager != null) spawnManager.AdvanceWaveAndStart();
-        else Debug.LogWarning("UpgradeUIManager: spawnManager not assigned.");
+        upgrades.ApplyUpgrade(upgrade);
+        MapManager.Instance.TeleportPlayerToMap(map);
+        spawner.StartWave();
     }
 
-    string PrettyName(PlayerUpgrade.UpgradeType t)
+    PlayerUpgrade.UpgradeType RandomUpgrade()
     {
-        switch (t)
-        {
-            case PlayerUpgrade.UpgradeType.ShotCooldown: return "Faster Fire";
-            case PlayerUpgrade.UpgradeType.Damage: return "More Damage";
-            case PlayerUpgrade.UpgradeType.Speed: return "Move Faster";
-            case PlayerUpgrade.UpgradeType.Health: return "Max Health +20";
-            default: return t.ToString();
-        }
+        return (PlayerUpgrade.UpgradeType)Random.Range(0, 4);
     }
 
-    string Description(PlayerUpgrade.UpgradeType t)
+    PlayerUpgrade.UpgradeType RandomUpgradeDifferent(PlayerUpgrade.UpgradeType other)
     {
-        switch (t)
-        {
-            case PlayerUpgrade.UpgradeType.ShotCooldown: return "Decrease time between shots.";
-            case PlayerUpgrade.UpgradeType.Damage: return "Increase bullet damage.";
-            case PlayerUpgrade.UpgradeType.Speed: return "Increase base movement speed.";
-            case PlayerUpgrade.UpgradeType.Health: return "Increase maximum health.";
-            default: return "";
-        }
-    }
-
-    Sprite IconFor(PlayerUpgrade.UpgradeType t)
-    {
-        switch (t)
-        {
-            case PlayerUpgrade.UpgradeType.ShotCooldown: return iconCooldown;
-            case PlayerUpgrade.UpgradeType.Damage: return iconDamage;
-            case PlayerUpgrade.UpgradeType.Speed: return iconSpeed;
-            case PlayerUpgrade.UpgradeType.Health: return iconHealth;
-            default: return null;
-        }
+        PlayerUpgrade.UpgradeType u;
+        do { u = RandomUpgrade(); }
+        while (u == other);
+        return u;
     }
 }

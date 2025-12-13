@@ -554,10 +554,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TargetDummy
   maxHealth: 5
-  healthBarObject: {fileID: 579058846017176147}
-  healthSlider: {fileID: 7005601269647405311}
-  fillImage: {fileID: 5109268254532949148}
-  smoothSpeed: 5
 --- !u!114 &8132765993041695339
 MonoBehaviour:
   m_ObjectHideFlags: 0

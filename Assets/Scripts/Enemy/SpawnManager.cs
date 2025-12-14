@@ -5,19 +5,27 @@ public class SpawnManager : MonoBehaviour
 {
     public static SpawnManager Instance;
 
+    [Header("Wave Settings")]
     public int enemiesPerWave = 5;
     public int waveIncrement = 2;
     public float spawnDelay = 0.25f;
 
+    [Header("UI")]
     public UpgradeUIManager upgradeUI;
 
     int aliveEnemies;
     int globalWave = 1;
     int wavesThisMap = 0;
 
+    // ✅ Public read-only access for UI
+    public int GlobalWave => globalWave;
+
     void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
     }
 
     public void ResetForNewMap()
@@ -28,6 +36,11 @@ public class SpawnManager : MonoBehaviour
     public void StartNextWave()
     {
         Debug.Log($"Starting Global Wave {globalWave} | Map Wave {wavesThisMap + 1}");
+
+        // ✅ Update Wave UI when wave starts
+        if (WaveUI.Instance != null)
+            WaveUI.Instance.UpdateWaveText(globalWave);
+
         StartCoroutine(SpawnWaveRoutine());
     }
 
@@ -56,7 +69,10 @@ public class SpawnManager : MonoBehaviour
                 sp.rotation
             );
 
-            enemy.GetComponent<TargetDummy>().OnDeath += OnEnemyDeath;
+            TargetDummy dummy = enemy.GetComponent<TargetDummy>();
+            if (dummy != null)
+                dummy.OnDeath += OnEnemyDeath;
+
             yield return new WaitForSeconds(spawnDelay);
         }
     }

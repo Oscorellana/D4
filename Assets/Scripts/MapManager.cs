@@ -39,8 +39,14 @@ public class MapManager : MonoBehaviour
         Debug.Log($"Loading Map: {map.name}");
 
         // Teleport player
+        CharacterController cc = player.GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = false;
+
         player.position = map.playerSpawnPoint.position;
         player.rotation = map.playerSpawnPoint.rotation;
+
+        if (cc != null) cc.enabled = true;
+
 
         // Reset and start waves
         SpawnManager.Instance.ResetForNewMap();

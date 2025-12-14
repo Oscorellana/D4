@@ -1,39 +1,54 @@
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
 
-    public List<MapData> maps = new List<MapData>();
+    public MapData[] maps;
+    public MapData startingMap;
+
     public MapData currentMap;
+    public Transform player;
 
     void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-
-        maps.AddRange(FindObjectsOfType<MapData>());
+        Instance = this;
     }
 
-    public MapData GetRandomMap(MapData exclude = null)
+    void Start()
     {
-        List<MapData> pool = new List<MapData>(maps);
-        if (exclude != null) pool.Remove(exclude);
-        return pool[Random.Range(0, pool.Count)];
+        if (startingMap == null)
+        {
+            Debug.LogError("MapManager: No starting map assigned!");
+            return;
+        }
+
+        LoadMap(startingMap);
     }
 
-    public void TeleportPlayerToMap(MapData map)
+    public void LoadMap(MapData map)
     {
-        PlayerController player = FindFirstObjectByType<PlayerController>();
-        if (player == null) return;
-
-        CharacterController cc = player.GetComponent<CharacterController>();
-        cc.enabled = false;
-        player.transform.position = map.playerSpawnPoint.position;
-        player.transform.rotation = map.playerSpawnPoint.rotation;
-        cc.enabled = true;
-
         currentMap = map;
+
+        if (map.playerSpawnPoint == null)
+        {
+            Debug.LogError("MapManager: Player spawn point missing on map!");
+            return;
+        }
+
+        Debug.Log($"Loading Map: {map.name}");
+
+        // Teleport player
+        player.position = map.playerSpawnPoint.position;
+        player.rotation = map.playerSpawnPoint.rotation;
+
+        // Reset and start waves
+        SpawnManager.Instance.ResetForNewMap();
+        SpawnManager.Instance.StartNextWave();
+    }
+
+    public MapData GetRandomMap()
+    {
+        return maps[Random.Range(0, maps.Length)];
     }
 }

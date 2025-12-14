@@ -836,7 +836,6 @@ MonoBehaviour:
   enemiesPerWave: 1
   waveIncrement: 2
   spawnDelay: 0.25
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   upgradeUI: {fileID: 649583101}
 --- !u!4 &332164763
 Transform:
@@ -920,6 +919,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7877468419321583590}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &412331593 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 328854773672392318, guid: a7ebf2ba0003ebb428eb5d7639b31eb8, type: 3}
+  m_PrefabInstance: {fileID: 71388480}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &436969042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1152,17 +1156,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   maps:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3021199383483194034}
+  - {fileID: 4245952273285696941}
+  - {fileID: 8478092789123338416}
+  - {fileID: 7877468419321583592}
+  - {fileID: 7048148760363064164}
+  - {fileID: 6427302355006879097}
+  - {fileID: 8971122525201668012}
+  - {fileID: 7020512935314456159}
+  - {fileID: 3419968520726118396}
+  - {fileID: 6068730432537946824}
+  startingMap: {fileID: 3021199383483194034}
   currentMap: {fileID: 3021199383483194034}
+  player: {fileID: 412331593}
 --- !u!4 &516386070
 Transform:
   m_ObjectHideFlags: 0
@@ -1171,57 +1177,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 516386068}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.23361476, y: -0.0020377513, z: 0.0046906546, w: -0.97231585}
+  m_LocalPosition: {x: -10.08771, y: 48.795273, z: -60.682472}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &568163696
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 568163697}
-  - component: {fileID: 568163698}
-  m_Layer: 0
-  m_Name: GameBootstrap
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &568163697
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 568163696}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.40282, y: 4.1488, z: -8.13411}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &568163698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 568163696}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 363d849d765ce4442890ab6a3b413cdb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameBootstrap
 --- !u!1 &575571835
 GameObject:
   m_ObjectHideFlags: 0
@@ -1518,12 +1480,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeUIManager
   panel: {fileID: 81690055}
-  buttonA: {fileID: 1101405674}
-  aTitle: {fileID: 1416172517}
-  aMap: {fileID: 1897107168}
-  buttonB: {fileID: 1696078058}
-  bTitle: {fileID: 1193896950}
-  bMap: {fileID: 1024716803}
+  optionButtonA: {fileID: 1101405674}
+  optionButtonB: {fileID: 1696078058}
+  optionTextA: {fileID: 1416172517}
+  optionTextB: {fileID: 1193896950}
 --- !u!4 &649583102
 Transform:
   m_ObjectHideFlags: 0
@@ -2332,6 +2292,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1193896948}
   m_CullTransparentMesh: 1
+--- !u!1 &1230971961
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1230971964}
+  - component: {fileID: 1230971963}
+  - component: {fileID: 1230971962}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1230971962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230971961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.UI.InputSystemUIInputModule
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
+--- !u!114 &1230971963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230971961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventSystem
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &1230971964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230971961}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1234467545
 GameObject:
   m_ObjectHideFlags: 0
@@ -4176,6 +4215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Camping Trip
   playerSpawnPoint: {fileID: 1238590370}
+  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   enemySpawnPoints:
   - {fileID: 2139305215}
   - {fileID: 355190321}
@@ -4199,6 +4239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Treasure Island
   playerSpawnPoint: {fileID: 2120914726}
+  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   enemySpawnPoints:
   - {fileID: 150279855}
 --- !u!4 &3626449031238085999 stripped
@@ -4230,6 +4271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Autumn Pond
   playerSpawnPoint: {fileID: 659695234}
+  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   enemySpawnPoints:
   - {fileID: 1234467546}
   - {fileID: 1667506124}
@@ -4259,6 +4301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Train Station
   playerSpawnPoint: {fileID: 3484253}
+  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   enemySpawnPoints:
   - {fileID: 1023901046}
   - {fileID: 1118210557}
@@ -4283,6 +4326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Temple
   playerSpawnPoint: {fileID: 297936587}
+  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   enemySpawnPoints:
   - {fileID: 2028158498}
   - {fileID: 2044382540}
@@ -4480,6 +4524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Moon
   playerSpawnPoint: {fileID: 1540836753}
+  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   enemySpawnPoints:
   - {fileID: 1898856240}
   - {fileID: 1372459999}
@@ -4503,6 +4548,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: City
   playerSpawnPoint: {fileID: 898330713}
+  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   enemySpawnPoints:
   - {fileID: 1738007120}
   - {fileID: 1742961680}
@@ -4616,6 +4662,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Pyramids
   playerSpawnPoint: {fileID: 2065466558}
+  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   enemySpawnPoints:
   - {fileID: 360394747}
   - {fileID: 1294350732}
@@ -4728,6 +4775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Holidays
   playerSpawnPoint: {fileID: 738249566}
+  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   enemySpawnPoints:
   - {fileID: 858163433}
   - {fileID: 2137943041}
@@ -5104,6 +5152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Stadium
   playerSpawnPoint: {fileID: 1161138105}
+  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
   enemySpawnPoints:
   - {fileID: 1725758598}
   - {fileID: 117873209}
@@ -5130,4 +5179,4 @@ SceneRoots:
   - {fileID: 575571839}
   - {fileID: 1725776406}
   - {fileID: 71388480}
-  - {fileID: 568163697}
+  - {fileID: 1230971964}

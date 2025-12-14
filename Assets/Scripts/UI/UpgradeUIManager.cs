@@ -1,81 +1,60 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections.Generic;
 
 public class UpgradeUIManager : MonoBehaviour
 {
     public GameObject panel;
 
-    public Button buttonA;
-    public TMP_Text aTitle;
-    public TMP_Text aMap;
+    public Button optionButtonA;
+    public Button optionButtonB;
 
-    public Button buttonB;
-    public TMP_Text bTitle;
-    public TMP_Text bMap;
+    public TextMeshProUGUI optionTextA;
+    public TextMeshProUGUI optionTextB;
 
-    PlayerUpgrade upgrades;
-    SpawnManager spawner;
+    PlayerUpgrade playerUpgrade;
 
     PlayerUpgrade.UpgradeType upgradeA;
     PlayerUpgrade.UpgradeType upgradeB;
-    MapData mapA;
-    MapData mapB;
 
-    void Start()
+    void Awake()
     {
-        upgrades = FindFirstObjectByType<PlayerUpgrade>();
-        spawner = FindFirstObjectByType<SpawnManager>();
+        playerUpgrade = FindAnyObjectByType<PlayerUpgrade>();
+
         panel.SetActive(false);
     }
 
     public void ShowUpgradeChoices()
     {
+        Time.timeScale = 0f;
         panel.SetActive(true);
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
 
-        upgradeA = RandomUpgrade();
-        upgradeB = RandomUpgradeDifferent(upgradeA);
+        // 🔹 CORRECT: no arguments passed
+        upgradeA = playerUpgrade.GetRandomUpgrade();
+        upgradeB = playerUpgrade.GetRandomUpgrade();
 
-        mapA = MapManager.Instance.GetRandomMap(MapManager.Instance.currentMap);
-        mapB = MapManager.Instance.GetRandomMap(mapA);
+        // prevent duplicates
+        while (upgradeB == upgradeA)
+            upgradeB = playerUpgrade.GetRandomUpgrade();
 
-        aTitle.text = upgradeA.ToString();
-        bTitle.text = upgradeB.ToString();
+        optionTextA.text = playerUpgrade.GetDescription(upgradeA);
+        optionTextB.text = playerUpgrade.GetDescription(upgradeB);
 
-        aMap.text = mapA.mapName;
-        bMap.text = mapB.mapName;
+        optionButtonA.onClick.RemoveAllListeners();
+        optionButtonB.onClick.RemoveAllListeners();
 
-        buttonA.onClick.RemoveAllListeners();
-        buttonB.onClick.RemoveAllListeners();
-
-        buttonA.onClick.AddListener(() => Select(upgradeA, mapA));
-        buttonB.onClick.AddListener(() => Select(upgradeB, mapB));
+        optionButtonA.onClick.AddListener(() => Select(upgradeA));
+        optionButtonB.onClick.AddListener(() => Select(upgradeB));
     }
 
-    void Select(PlayerUpgrade.UpgradeType upgrade, MapData map)
+    void Select(PlayerUpgrade.UpgradeType upgrade)
     {
         panel.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Time.timeScale = 1f;
 
-        upgrades.ApplyUpgrade(upgrade);
-        MapManager.Instance.TeleportPlayerToMap(map);
-        spawner.StartWave();
-    }
+        playerUpgrade.ApplyUpgrade(upgrade);
 
-    PlayerUpgrade.UpgradeType RandomUpgrade()
-    {
-        return (PlayerUpgrade.UpgradeType)Random.Range(0, 4);
-    }
-
-    PlayerUpgrade.UpgradeType RandomUpgradeDifferent(PlayerUpgrade.UpgradeType other)
-    {
-        PlayerUpgrade.UpgradeType u;
-        do { u = RandomUpgrade(); }
-        while (u == other);
-        return u;
+        // Resume game
+        SpawnManager.Instance.StartNextWave();
     }
 }

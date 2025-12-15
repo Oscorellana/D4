@@ -4226,8 +4226,8 @@ MonoBehaviour:
   - {fileID: 7020512935314456159}
   - {fileID: 3419968520726118396}
   - {fileID: 6068730432537946824}
-  startingMap: {fileID: 6427302355006879097}
-  currentMap: {fileID: 6427302355006879097}
+  startingMap: {fileID: 3021199383483194034}
+  currentMap: {fileID: 3021199383483194034}
   player: {fileID: 412331593}
 --- !u!4 &516386070
 Transform:

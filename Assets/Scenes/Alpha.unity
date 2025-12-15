@@ -763,11 +763,56 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4862397117022993076, guid: a7ebf2ba0003ebb428eb5d7639b31eb8, type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 71388481}
+    - target: {fileID: 4862397117022993076, guid: a7ebf2ba0003ebb428eb5d7639b31eb8, type: 3}
+      propertyPath: playerHealth
+      value: 
+      objectReference: {fileID: 71388483}
+    - target: {fileID: 4862397117022993076, guid: a7ebf2ba0003ebb428eb5d7639b31eb8, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 71388482}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7ebf2ba0003ebb428eb5d7639b31eb8, type: 3}
+--- !u!114 &71388481 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7238363274899385307, guid: a7ebf2ba0003ebb428eb5d7639b31eb8, type: 3}
+  m_PrefabInstance: {fileID: 71388480}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d3afb69e4d570b42a340547349f06d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapon
+--- !u!114 &71388482 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4938512870466683682, guid: a7ebf2ba0003ebb428eb5d7639b31eb8, type: 3}
+  m_PrefabInstance: {fileID: 71388480}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adfccb0a2ab441146a1e13bee28ae71a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+--- !u!114 &71388483 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4064297619755995535, guid: a7ebf2ba0003ebb428eb5d7639b31eb8, type: 3}
+  m_PrefabInstance: {fileID: 71388480}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 305fe1b7d1a90fc4cb68500e786f23a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
 --- !u!1 &76420177 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7200365141335528773, guid: 9c5e6ddb45f91c9458a6c2b59c9a244a, type: 3}
@@ -18068,7 +18113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Camping Trip
   playerSpawnPoint: {fileID: 1238590370}
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
+  enemyPrefab: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
   enemySpawnPoints:
   - {fileID: 2139305215}
   - {fileID: 355190321}
@@ -18092,7 +18137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Treasure Island
   playerSpawnPoint: {fileID: 2120914726}
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
+  enemyPrefab: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
   enemySpawnPoints:
   - {fileID: 150279855}
 --- !u!4 &3626449031238085999 stripped
@@ -18124,7 +18169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Autumn Pond
   playerSpawnPoint: {fileID: 659695234}
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
+  enemyPrefab: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
   enemySpawnPoints:
   - {fileID: 1234467546}
   - {fileID: 1667506124}
@@ -18154,12 +18199,77 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Train Station
   playerSpawnPoint: {fileID: 3484253}
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
+  enemyPrefab: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
   enemySpawnPoints:
   - {fileID: 1023901046}
   - {fileID: 1118210557}
   - {fileID: 1332278273}
   - {fileID: 309722951}
+--- !u!1001 &6382100572525337423
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5924563686605578416, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 412331593}
+    - target: {fileID: 7296013276578885743, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -65.34649
+      objectReference: {fileID: 0}
+    - target: {fileID: 7296013276578885743, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7296013276578885743, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -283.4622
+      objectReference: {fileID: 0}
+    - target: {fileID: 7296013276578885743, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7296013276578885743, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7296013276578885743, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7296013276578885743, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7296013276578885743, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7296013276578885743, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7296013276578885743, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8588760551565178497, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
+      propertyPath: hideDelay
+      value: 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
 --- !u!1 &6427302355006879096 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2778812845294126758, guid: ef240967e37fc73459ff85a259a4b238, type: 3}
@@ -18179,7 +18289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Temple
   playerSpawnPoint: {fileID: 297936587}
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
+  enemyPrefab: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
   enemySpawnPoints:
   - {fileID: 2028158498}
   - {fileID: 2044382540}
@@ -19629,7 +19739,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Moon
   playerSpawnPoint: {fileID: 1540836753}
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
+  enemyPrefab: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
   enemySpawnPoints:
   - {fileID: 1898856240}
   - {fileID: 1372459999}
@@ -19653,7 +19763,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: City
   playerSpawnPoint: {fileID: 898330713}
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
+  enemyPrefab: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
   enemySpawnPoints:
   - {fileID: 1738007120}
   - {fileID: 1742961680}
@@ -20529,7 +20639,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Pyramids
   playerSpawnPoint: {fileID: 2065466558}
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
+  enemyPrefab: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
   enemySpawnPoints:
   - {fileID: 360394747}
   - {fileID: 1294350732}
@@ -20916,7 +21026,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Holidays
   playerSpawnPoint: {fileID: 738249566}
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
+  enemyPrefab: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
   enemySpawnPoints:
   - {fileID: 858163433}
   - {fileID: 2137943041}
@@ -22500,7 +22610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapData
   mapName: Stadium
   playerSpawnPoint: {fileID: 1161138105}
-  enemyPrefab: {fileID: 8506172107559868319, guid: 33f0770b885d0144d99c41e2ca200126, type: 3}
+  enemyPrefab: {fileID: 8435195124571603235, guid: 795152f8fee04314c9ae12109972d6f2, type: 3}
   enemySpawnPoints:
   - {fileID: 1725758598}
   - {fileID: 117873209}
@@ -22529,3 +22639,4 @@ SceneRoots:
   - {fileID: 1725776406}
   - {fileID: 1230971964}
   - {fileID: 557213887}
+  - {fileID: 6382100572525337423}

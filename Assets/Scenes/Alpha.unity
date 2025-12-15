@@ -21842,6 +21842,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map 0 Camping Trip
       objectReference: {fileID: 0}
+    - target: {fileID: 8306924109251428716, guid: cc08684085c713b4c90172a8641c3416, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8445450731672725311, guid: cc08684085c713b4c90172a8641c3416, type: 3}
       propertyPath: m_Enabled
       value: 0

@@ -3,18 +3,24 @@ using UnityEngine.SceneManagement;
 
 public class DeathMenuUI : MonoBehaviour
 {
-    void OnEnable()
+    public static DeathMenuUI Instance;
+
+    void Awake()
     {
-        PlayerHealth.OnPlayerDeath += Show;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        gameObject.SetActive(false);
     }
 
-    void OnDisable()
+    public void Show()
     {
-        PlayerHealth.OnPlayerDeath -= Show;
-    }
+        Debug.Log("DEATH MENU SHOWN");
 
-    void Show()
-    {
         gameObject.SetActive(true);
 
         Time.timeScale = 0f;
@@ -25,11 +31,19 @@ public class DeathMenuUI : MonoBehaviour
 
     public void RestartGame()
     {
+        Debug.Log("RESTART BUTTON PRESSED");
+
         Time.timeScale = 1f;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        string sceneName = SceneManager.GetActiveScene().name;
+        Debug.Log("Reloading scene: " + sceneName);
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void QuitGame()
+    {
+        Time.timeScale = 1f;
+        Application.Quit();
     }
 }

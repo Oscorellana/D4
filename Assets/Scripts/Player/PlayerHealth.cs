@@ -1,17 +1,13 @@
 using UnityEngine;
-using System;
 
 public class PlayerHealth : MonoBehaviour
 {
     public float maxHealth = 100f;
     [HideInInspector] public float currentHealth;
-
     public PlayerHealthBar healthBar;
     public GameObject deathEffect;
 
-    public static event Action OnPlayerDeath;
-
-    bool isDead = false;
+    bool isDead;
 
     void Start()
     {
@@ -40,17 +36,21 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-        if (isDead) return;
         isDead = true;
+        Debug.Log("PLAYER DIED");
 
         if (deathEffect != null)
             Instantiate(deathEffect, transform.position, Quaternion.identity);
 
-        Debug.Log("PLAYER DIED");
+        // Disable player systems
+        PlayerController pc = GetComponent<PlayerController>();
+        if (pc != null) pc.enabled = false;
 
-        OnPlayerDeath?.Invoke();
+        Weapon weapon = GetComponentInChildren<Weapon>();
+        if (weapon != null) weapon.enabled = false;
 
-        gameObject.SetActive(false);
+        // Show death menu
+        DeathMenuUI.Instance.Show();
     }
 
     public void AddMaxHealth(float amount)
